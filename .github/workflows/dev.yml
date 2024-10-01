@@ -1,0 +1,39 @@
+name: State Components – Lint and Test
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Run linter
+      - name: Run Linter
+        run: npm run lint # Replace with your lint command
+
+      # Run tests
+      - name: Run Tests
+        run: npm test # Replace with your test command
+
+  update-submodules:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Admin Repository Update Workflow
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          repository: bgfborges/Admin
+          event-type: update-submodule
+          token: ${{ secrets.ADMIN_REPO_TOKEN }}
+
+      - name: Trigger CustApp Repository Update Workflow
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          repository: bgfborges/CustApp
+          event-type: update-submodule
+          token: ${{ secrets.CUSTAPP_REPO_TOKEN }}
