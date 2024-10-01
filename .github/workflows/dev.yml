@@ -37,4 +37,4 @@ jobs:
           repository: bgfborges/CustApp
           event-type: update-submodule
           token: ${{ secrets.CUSTAPP_REPO_TOKEN }}
-          debug: true # Enable debugging for dispatch
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
