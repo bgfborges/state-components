@@ -1,0 +1,12 @@
+{
+  "name": "state-components",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Alert: no TEST specified [PENDING] \"",
+    "lint": "echo \"Alert: no LINT specified [PENDING] \""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
