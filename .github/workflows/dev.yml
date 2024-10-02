@@ -37,4 +37,4 @@ jobs:
           repository: bgfborges/CustApp
           event-type: update-submodule
           token: ${{ secrets.CUSTAPP_REPO_TOKEN }}
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "qa-action": "${{ github.event.head_commit.message }}" }'
