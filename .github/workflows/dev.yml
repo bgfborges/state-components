@@ -48,12 +48,13 @@ jobs:
             git checkout dev  # Checkout the latest dev branch
             git pull origin dev
             git checkout qa  # Checkout the latest qa branch
-            git merge dev --allow-unrelated-histories || true
+            git merge dev --allow-unrelated-histories -X theirs || true
 
             # Handle conflicts if any
             if ! git diff --check --exit-code; then
-              echo "Merge conflict detected. Please resolve manually."
-              exit 1
+              echo "Automatically resolving conflicts in favor of dev branch."
+              git add .
+              git commit -m "Resolve merge conflicts by taking changes from dev branch"
             fi
 
             # Commit and push changes after merging
