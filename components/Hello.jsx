@@ -1,3 +1,9 @@
+const data = {
+  pending_balance: 'Hello World',
+}
+
 export const Hello = () => {
-  return <h1>Hello World 6</h1>
+  const { pending_balance: pendingBalance } = data
+
+  return <h1>{pendingBalance}</h1>
 }
