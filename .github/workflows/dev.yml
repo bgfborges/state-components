@@ -1,4 +1,4 @@
-name: State Components – Lint, Test, and Merge to QA
+name: State Components – Lint and Test
 
 on:
   push:
@@ -14,45 +14,27 @@ jobs:
 
       # Run linter
       - name: Run Linter
-        # run: npm run lint # Replace with your lint command
+        run: npm run lint # Replace with your lint command
 
       # Run tests
       - name: Run Tests
-        # run: npm test # Replace with your test command
+        run: npm test # Replace with your test command
 
-  merge-to-qa:
+  update-submodules:
     needs: lint-and-test
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, '--ca-qa')
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Trigger Admin Repository Update Workflow
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          repository: bgfborges/Admin
+          event-type: update-submodule
+          token: ${{ secrets.ADMIN_REPO_TOKEN }}
 
-      - name: Set Git User Identity
-        run: |
-          git config --global user.email "ci@example.com"
-          git config --global user.name "CI Bot"
-
-      # Step 1: Merge dev to qa
-      - name: Merge dev to qa
-        run: |
-          git checkout qa
-          git pull origin qa
-          git merge dev
-
-          # If there are no conflicts, push changes
-          if git diff --check --exit-code; then
-            git push origin qa
-          else
-            echo "Merge conflicts detected, please resolve them manually."
-            exit 1
-          fi
-
-      # Step 2: Trigger CustApp update workflow
       - name: Trigger CustApp Repository Update Workflow
         uses: peter-evans/repository-dispatch@v2
         with:
           repository: bgfborges/CustApp
           event-type: update-submodule
           token: ${{ secrets.CUSTAPP_REPO_TOKEN }}
-          client-payload: '{"branch": "qa", "state_components_branch": "qa"}'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
