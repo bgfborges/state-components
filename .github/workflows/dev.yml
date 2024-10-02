@@ -24,6 +24,18 @@ jobs:
     needs: lint-and-test
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Check commit message for --ca-qa flag and set qa-action
+      - name: Check commit message for --ca-qa flag
+        id: check-commit
+        run: |
+          LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          if [[ "$LATEST_COMMIT_MESSAGE" == *"--ca-qa"* ]]; then
+            echo "qa-action=true" >> $GITHUB_ENV
+          else
+            echo "qa-action=false" >> $GITHUB_ENV
+          fi
+
+      # Step 2: Trigger Admin Repository Update Workflow
       - name: Trigger Admin Repository Update Workflow
         uses: peter-evans/repository-dispatch@v2
         with:
@@ -31,10 +43,11 @@ jobs:
           event-type: update-submodule
           token: ${{ secrets.ADMIN_REPO_TOKEN }}
 
+      # Step 3: Trigger CustApp Repository Update Workflow
       - name: Trigger CustApp Repository Update Workflow
         uses: peter-evans/repository-dispatch@v2
         with:
           repository: bgfborges/CustApp
           event-type: update-submodule
           token: ${{ secrets.CUSTAPP_REPO_TOKEN }}
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "qa-action": "${{ github.event.head_commit.message }}" }'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "qa-action": "${{ github.env.qa-action }}" }'
