@@ -1,5 +1,5 @@
 const data = {
-  pending_balance: 'Hello World 5',
+  pending_balance: 'Hello World 6',
 }
 
 export const Hello = () => {
