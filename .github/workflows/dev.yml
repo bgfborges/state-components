@@ -67,7 +67,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v2
         with:
           repository: bgfborges/Admin
-          event-type: update-submodule
+          event-type: admin-update-submodule
           token: ${{ secrets.ADMIN_REPO_TOKEN }}
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "qa-action": "${{ github.event.head_commit.message }}" }'
 
