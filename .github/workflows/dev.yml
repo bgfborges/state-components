@@ -28,7 +28,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v2
         with:
           repository: bgfborges/Admin
-          event-type: update-submodule
+          event-type: update-sgit ubmodule
           token: ${{ secrets.ADMIN_REPO_TOKEN }}
 
       - name: Trigger CustApp Repository Update Workflow
